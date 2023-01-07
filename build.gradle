@@ -1,12 +1,17 @@
 plugins {
     id 'java'
+    id 'application'
 }
 
-group 'org.example'
+group 'io.github.gitterrost4'
 version '0.1'
 
 repositories {
     mavenCentral()
+}
+
+application{
+    mainClass = 'io.github.gitterrost4.ebmcrawler.EBMCrawler'
 }
 
 dependencies {
@@ -17,4 +22,15 @@ dependencies {
 
 test {
     useJUnitPlatform()
+}
+
+jar {
+    manifest {
+        attributes(
+                'Main-Class': "io.github.gitterrost4.ebmcrawler.EBMCrawler"
+        )
+    }
+    from {
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    }
 }

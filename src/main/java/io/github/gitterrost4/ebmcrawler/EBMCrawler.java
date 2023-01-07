@@ -1,4 +1,4 @@
-package org.example;
+package io.github.gitterrost4.ebmcrawler;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -14,7 +14,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class Main {
+public class EBMCrawler {
 
     private record EBMItem(String number, String name, String abrBest, Map<String,List<String>> behandlungsAusschluss){
         public String toCSVLine(Set<String> behandlungsAusschlussHeaders){
@@ -35,7 +35,7 @@ public class Main {
         if(files == null){
             throw new IOException("Could not read from path "+ebmDir);
         }
-        List<EBMItem> ebmItems = Arrays.stream(files).map(Main::parseHtmlFile).flatMap(Optional::stream).toList();
+        List<EBMItem> ebmItems = Arrays.stream(files).map(EBMCrawler::parseHtmlFile).flatMap(Optional::stream).toList();
         Set<String> behAusschlussHeaders = ebmItems.stream().flatMap(e->e.behandlungsAusschluss().keySet().stream()).collect(Collectors.toSet());
 
         String headerLine = "number"+CSV_SEPARATOR+"title"+CSV_SEPARATOR+"Abrechnungsbestimmung"+CSV_SEPARATOR+ String.join(CSV_SEPARATOR, behAusschlussHeaders);
